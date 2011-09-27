@@ -42,7 +42,7 @@ class DB(object):
                 UPDATE
                     packages
                 SET
-                    filename=:filename),
+                    filename=:filename,
                     version=:version,
                     desc=:desc,
                     groups=:groups,

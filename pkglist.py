@@ -18,10 +18,17 @@ class Repo(object):
         chunks = raw.split('\n\n')
         for chunk in chunks:
             try:
-                typename, value = chunk.split('\n')
+                splited = chunk.split('\n')
+                l = len(splited)
+                typename = splited[0]
+                value = []
+                for i in range(1, l):
+                    value.append(splited[i])
+                #typename, value = chunk.split('\n')
             except ValueError:
                 continue
-            pkg[typename[1:-1].lower()] = value
+            pkg[typename[1:-1].lower()] = ", ".join(value)
+            #pkg[typename[1:-1].lower()] = value
         return pkg
 
     def packages(self):
