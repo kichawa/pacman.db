@@ -15,12 +15,23 @@ class DB(object):
                 c.execute('''
                 CREATE TABLE packages(
                     name VARCHAR(128) PRIMARY KEY,
+		    filename VARCHAR(256),
+		    version VARCHAR(64),
+		    desc TEXT,
+		    groups VARCHAR(64),
+		    csize INT,
+                    isize INT,
+                    md5sum TEXT,
+		    url TEXT,
                     license VARCHAR(32),
-                    builddate INT
+		    arch VARCHAR(6),
+                    builddate TIMESTAMP,
+		    packager TEXT,
+		    replaces VARCHAR(128)
                 )
                 ''')
             except sqlite3.OperationalError:
-                pass
+		pass
             db.commit()
 
     def add_or_update(self, **p):
@@ -41,9 +52,9 @@ class DB(object):
             else:
                 c.execute('''
                 INSERT INTO
-                    packages(name, license, builddate)
+                    packages(name, filename, version, desc, groups, isize, csize, md5sum, url, license, arch, builddate, packager, replaces)
                 VALUES
-                    (:name, :license, :builddate)
+                    (:name, :filename, :version, :desc, :groups, :isize, :csize, :md5sum, :url, :license, :arch, :builddate, :packager, :replaces)
                 ''', p)
             db.commit()
 
@@ -53,6 +64,10 @@ class DB(object):
     def _prepare_pkg(self, p):
         p['builddate'] = int(p['builddate'])
         p['license'] = p.get('license', '')
+        p['groups'] = p.get('groups', '')
+        p['packager'] = p['packager'].decode("utf-8")
+	if not 'replaces' in p:
+	    p['replaces'] = ""
         return p
 
 
