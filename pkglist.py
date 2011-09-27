@@ -17,7 +17,7 @@ class Repo(object):
         pkg = {}
         chunks = raw.split('\n\n')
         for chunk in chunks:
-	    try:
+            try:
                 typename, value = chunk.split('\n')
             except ValueError:
                 continue
