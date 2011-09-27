@@ -1,7 +1,5 @@
 import sqlite3
-
 import pkglist
-
 
 
 class DB(object):
