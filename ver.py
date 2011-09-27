@@ -42,8 +42,19 @@ class DB(object):
                 UPDATE
                     packages
                 SET
+                    filename=:filename),
+                    version=:version,
+                    desc=:desc,
+                    groups=:groups,
+                    csize=:csize,
+                    isize=:isize,
+                    md5sum=:md5sum,
+                    url=:url,
                     license=:license,
-                    builddate=:builddate
+                    arch=:arch,
+                    builddate=:builddate,
+                    packager=:packager,
+                    replaces=:replaces
                 WHERE
                     name=:name
                 ''', p)
