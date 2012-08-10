@@ -8,7 +8,7 @@ class Repo(object):
     def _packages(self):
         with tarfile.open(self.path) as tar:
             for member in tar.getmembers():
-                if not member.name.endswith('/desc'):
+                if not member.name.endswith('/desc'):  # and not member.name.endswith('/depends'):
                     continue
                 tarfd = tar.extractfile(member)
                 yield tarfd.read()
@@ -19,6 +19,7 @@ class Repo(object):
         for chunk in chunks:
             try:
                 splited = chunk.split('\n')
+                #print splited
                 l = len(splited)
                 typename = splited[0]
                 value = []
@@ -37,9 +38,15 @@ class Repo(object):
 
 
 def _example():
-    r = Repo('/var/lib/pacman/sync/core.db')
+    r = Repo('core.db')
+    #i = 0
     for pkg in r.packages():
         print pkg
+        #i += 1
+        #print i
+        """if pkg['name'] == 'wget':
+            for info, name in pkg.iteritems():
+                print info, name"""
 
 if __name__ == '__main__':
     _example()

@@ -20,6 +20,8 @@ class DB(object):
                     csize INT,
                     isize INT,
                     md5sum TEXT,
+                    sha256sum TEXT,
+                    pgpsig TEXT,
                     url TEXT,
                     license VARCHAR(32),
                     arch VARCHAR(6),
@@ -49,6 +51,8 @@ class DB(object):
                     csize=:csize,
                     isize=:isize,
                     md5sum=:md5sum,
+                    sha256sum=:sha256sum,
+                    pgpsig=:pgpsig,
                     url=:url,
                     license=:license,
                     arch=:arch,
@@ -62,11 +66,11 @@ class DB(object):
                 c.execute('''
                 INSERT INTO
                     packages(name, filename, version, desc, groups,
-                        isize, csize, md5sum, url, license, arch,
+                        isize, csize, md5sum, sha256sum, pgpsig, url, license, arch,
                         builddate, packager, replaces)
                 VALUES
                     (:name, :filename, :version, :desc, :groups,
-                        :isize, :csize, :md5sum, :url, :license, :arch,
+                        :isize, :csize, :md5sum, :sha256sum, :pgpsig, :url, :license, :arch,
                         :builddate, :packager, :replaces)
                 ''', p)
             db.commit()
@@ -87,7 +91,7 @@ class DB(object):
 def _example():
     pkg32 = DB('packages_32.sqlite3')
     pkg32.create()
-    repo = pkglist.Repo('/var/lib/pacman/sync/core.db')
+    repo = pkglist.Repo('core.db')
     for pkg in repo.packages():
         pkg32.add_or_update(**pkg)
 
