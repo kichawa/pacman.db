@@ -1,6 +1,12 @@
 import sqlite3
 import pkglist
 
+#TODO:
+#m2m or json with pkg_id
+#depends
+#optdepends
+#conflicts
+#provides
 
 class DB(object):
     def __init__(self, db_path):
