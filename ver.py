@@ -27,7 +27,8 @@ class DB(object):
                     arch VARCHAR(6),
                     builddate TIMESTAMP,
                     packager TEXT,
-                    replaces VARCHAR(128)
+                    replaces VARCHAR(128),
+                    depends TEXT
                 )
                 ''')
             except sqlite3.OperationalError:
@@ -58,7 +59,8 @@ class DB(object):
                     arch=:arch,
                     builddate=:builddate,
                     packager=:packager,
-                    replaces=:replaces
+                    replaces=:replaces,
+                    depends=:depends
                 WHERE
                     name=:name
                 ''', p)
@@ -67,33 +69,36 @@ class DB(object):
                 INSERT INTO
                     packages(name, filename, version, desc, groups,
                         isize, csize, md5sum, sha256sum, pgpsig, url, license, arch,
-                        builddate, packager, replaces)
+                        builddate, packager, replaces, depends)
                 VALUES
                     (:name, :filename, :version, :desc, :groups,
                         :isize, :csize, :md5sum, :sha256sum, :pgpsig, :url, :license, :arch,
-                        :builddate, :packager, :replaces)
+                        :builddate, :packager, :replaces, :depends)
                 ''', p)
             db.commit()
 
     def _db(self):
         return sqlite3.connect(self.db_path)
 
-    def _prepare_pkg(self, p):
-        p['builddate'] = int(p['builddate'])
-        p['license'] = p.get('license', '')
-        p['groups'] = p.get('groups', '')
-        p['packager'] = p['packager'].decode("utf-8")
-        if not 'replaces' in p:
-            p['replaces'] = ""
-        return p
+    def _prepare_pkg(self, pkg): #packages):
+        pp = pkg['desc']
+        pp['builddate'] = int(pp['builddate'])
+        pp['license'] = pp.get('license', '')
+        pp['groups'] = pp.get('groups', '')
+        pp['packager'] = pp['packager'].decode("utf-8")
+        if not 'replaces' in pp:
+            pp['replaces'] = ""
+        pp['depends'] = str(pkg['depends'])
+        return pp
 
 
 def _example():
     pkg32 = DB('packages_32.sqlite3')
     pkg32.create()
     repo = pkglist.Repo('core.db')
-    for pkg in repo.packages():
-        pkg32.add_or_update(**pkg)
+    for packages in repo.packages():
+        for name, pkg in packages.iteritems():
+            pkg32.add_or_update(**pkg)
 
 if __name__ == '__main__':
     _example()
