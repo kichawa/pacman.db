@@ -49,7 +49,7 @@ def _example_search(pattern):
     pkgs = pkg32.search_pkg(pattern)
     if pkgs:
         for pkg in pkgs:
-            print pkg
+            print pkg[0]
     else:
         print "There is not pkgs contain '%s'" % pattern
 
@@ -57,7 +57,7 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='Search db with name of package')
     parser.add_argument('-n', '--name', help='show info about pkg')
-    parser.add_argument('-s', '--search', help='show pkgs fit to patterns')
+    parser.add_argument('-s', '--search', help='show pkgs fit to pattern', nargs='*')
 
     args = parser.parse_args()
 
@@ -66,5 +66,5 @@ if __name__ == '__main__':
     if name:
         _example(name)
     if search:
-        _example_search(search)
-        
+        for item in search:
+            _example_search(item)
