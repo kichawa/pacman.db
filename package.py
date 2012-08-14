@@ -67,4 +67,7 @@ if __name__ == '__main__':
         _example(name)
     if search:
         for item in search:
-            _example_search(item)
+            if len(item) > 2:
+                _example_search(item)
+            else:
+                print "Your pattern '%s' is too short." % item
