@@ -53,8 +53,7 @@ def _example_search(pattern):
     else:
         print "There is not pkgs contain '%s'" % pattern
 
-if __name__ == '__main__':
-
+def run():
     parser = argparse.ArgumentParser(description='Search db with name of package')
     parser.add_argument('-n', '--name', help='show info about pkg')
     parser.add_argument('-s', '--search', help='show pkgs fit to pattern', nargs='*')
@@ -66,8 +65,15 @@ if __name__ == '__main__':
     if name:
         _example(name)
     if search:
-        for item in search:
-            if len(item) > 2:
-                _example_search(item)
-            else:
-                print "Your pattern '%s' is too short." % item
+        if len(search) > 3:
+            print "Too much patterns"
+        else:
+            for item in search:
+                if len(item) > 2:
+                    _example_search(item)
+                else:
+                    print "Your pattern '%s' is too short." % item
+
+
+if __name__ == '__main__':
+    run()
