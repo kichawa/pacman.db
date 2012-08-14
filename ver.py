@@ -7,6 +7,7 @@ import pkglist
 #optdepends
 #conflicts
 #provides
+#{'': '', '%DEPENDS%': '', '%CONFLICTS%': '', '%OPTDEPENDS%': '', '%PROVIDES%': ''}
 
 class DB(object):
     def __init__(self, db_path):
@@ -94,7 +95,7 @@ class DB(object):
         pp['packager'] = pp['packager'].decode("utf-8")
         if not 'replaces' in pp:
             pp['replaces'] = ""
-        pp['depends'] = str(pkg['depends'])
+        pp['depends'] = pkg['depends']
         return pp
 
 
